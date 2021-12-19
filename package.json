@@ -1,0 +1,28 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "## Table of Contents   * [User Story](#user-story)   * [Acceptance Criteria](#acceptance-criteria)   * [Technologies Used](#technologies-used)   * [Installation](#installation)   * [Questions](#questions)   * [License](#license)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcastillo9/employee-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcastillo9/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/jcastillo9/employee-tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.12.0"
+  }
+}
