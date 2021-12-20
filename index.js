@@ -118,13 +118,13 @@ const addEmployee = () => {
         {
             type: "input",
             name: "role",
-            message: "What is the employee's role id number?"
+            message: "What is the employee's role ID number?"
         },
 
         {
             type: "input",
             name: "manager",
-            message: "What is the manager's id number?"
+            message: "What is the manager's ID number?"
         }
     ])
 
@@ -136,6 +136,45 @@ const addEmployee = () => {
     })
 
 }
+
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "roleName",
+            message: "What is the role?"
+        },
+
+        {
+            type: "input",
+            name: "salaryAmount",
+            message: "What is the salary for this role?"
+        },
+
+        {
+            type: "input",
+            name: "departmentID",
+            message: "What is the department ID number?"
+        }
+    ])
+
+    .then(result => {
+        db.query("INSERT INTO role (title, salary, department_id VALUES (?, ?, ?)", [result.roleName, result.salaryAmount, result.departmentID], function (err, result) {
+            if (err) throw err;
+            console.table(result);
+            firstQuestion();
+        })
+    })
+
+}
+// addRole();
+//                     break;
+//                 case "View All Departments":
+//                     viewDepartment();
+//                     break;
+//                 case "Add Department":
+//                     addDepartment();
+//                     break;
 
 module.exports = sequelize
 
