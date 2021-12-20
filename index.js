@@ -44,6 +44,9 @@ const firstQuestion = () => {
                 case "View All Roles":
                     viewRoles();
                     break;
+                case "Add Employee":
+                    addEmployee();
+                    break;
                 case "Add Role":
                     addRole();
                     break;
@@ -71,7 +74,7 @@ const updateEmployee = () => {
     inquirer.prompt ([
         {
             type: "input",
-            name: "updateEmployee",
+            name: "updateEmployeeRole",
             message: "Which employee would you like to update?"
         },
 
@@ -82,12 +85,56 @@ const updateEmployee = () => {
         }
     ])
     .then(result => {
-        db.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [answer.updateRole, answer.updateEmployee], function(err, result) {
+        db.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [result.updateRole, result.updateEmployeeRole], function(err, result) {
             if (err) throw err;
             console.table(result);
             firstQuestion();
         })
     })
+}
+
+const viewRoles = () => {
+    db.query("SELECT * FROM roles", function (err, result) {
+        if (err) throw err;
+        console.table(result);
+        firstQuestion();
+    });
+}
+
+const addEmployee = () => {
+    inquirer.prompt ([
+        {
+            type: "input",
+            name: "firstName",
+            message: "What is the employee's first name?"
+        },
+
+        {
+            type: "input",
+            name: "lastName",
+            message: "What s the employee's last name?"
+        },
+
+        {
+            type: "input",
+            name: "role",
+            message: "What is the employee's role id number?"
+        },
+
+        {
+            type: "input",
+            name: "manager",
+            message: "What is the manager's id number?"
+        }
+    ])
+
+    .then(result => {
+        db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [result.firstName, result.lastName, result.role, result.manager], function(err, result) {
+            if (err) throw err;
+            console.table(result)
+        })
+    })
+
 }
 
 module.exports = sequelize
