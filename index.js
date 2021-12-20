@@ -167,14 +167,32 @@ const addRole = () => {
     })
 
 }
-// addRole();
-//                     break;
-//                 case "View All Departments":
-//                     viewDepartment();
-//                     break;
-//                 case "Add Department":
-//                     addDepartment();
-//                     break;
+
+const viewDepartment = () => {
+    db.query("SELECT * FROM department", function (err, result) {
+        if (err) throw err;
+        console.table(result);
+        firstQuestion();
+    })
+}
+
+const addDepartment = () => {
+    inquirer.prompt ([
+        {
+            type: "input",
+            name: "deptName",
+            message: "What department would you like to add?"
+        }
+    ])
+
+    .then(result => {
+        db.query("INSERT INTO department (name VALUES ?)", (result.deptName), function(err, result) {
+            if (err) throw err;
+            console.table(result)
+        })
+    })
+}
+
 
 module.exports = sequelize
 
