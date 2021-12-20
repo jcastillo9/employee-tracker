@@ -1,20 +1,8 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const fs = require('fs')
 const Sequelize = require('sequelize');
 const table = require('console.table');
-const Connection = require('mysql2/typings/mysql/lib/Connection');
-require('dotenv').config();
-
-const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASS,
-    {
-        host: 'localhost',
-        dialect: 'mysql',
-        port: 3306
-    }
-);
 
 const firstQuestion = () => {
     inquirer.prompt([
@@ -194,10 +182,10 @@ const addDepartment = () => {
     })
 }
 
-const quit = () => {
-    Connection.end();
-    process.exit();
-}
+// const quit = () => {
+//     Connection.end();
+//     process.exit();
+// }
 
-module.exports = sequelize
+
 
