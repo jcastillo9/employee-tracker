@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const Sequelize = require('sequelize');
 const table = require('console.table');
+const Connection = require('mysql2/typings/mysql/lib/Connection');
 require('dotenv').config();
 
 const sequelize = new Sequelize(
@@ -193,6 +194,10 @@ const addDepartment = () => {
     })
 }
 
+const quit = () => {
+    Connection.end();
+    process.exit();
+}
 
 module.exports = sequelize
 
