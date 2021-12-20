@@ -7,7 +7,7 @@ require('dotenv').config();
 const sequelize = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USER,
-    process.env.DB_PASS, 
+    process.env.DB_PASS,
     {
         host: 'localhost',
         dialect: 'mysql',
@@ -32,31 +32,39 @@ const firstQuestion = () => {
             ]
         }
     ])
-    .then(result => {
-        console.log("You selected to" + result.option);
-        switch(result.option) {
-            case "View All Employees":
-                viewEmployees();
-                break;
-            case "Update Employee Role":
-                updateEmployee();
-                break;
-            case "View All Roles":
-                viewRoles();
-                break;
-            case "Add Role":
-                addRole();
-                break;
-            case "View All Departments":
-                viewDepartment();
-                break;
-            case "Add Department":
-                addDepartment();
-                break;
-            default:
-                quit();
-        }
-    })
+        .then(result => {
+            console.log("You selected to" + result.option);
+            switch (result.option) {
+                case "View All Employees":
+                    viewEmployees();
+                    break;
+                case "Update Employee Role":
+                    updateEmployee();
+                    break;
+                case "View All Roles":
+                    viewRoles();
+                    break;
+                case "Add Role":
+                    addRole();
+                    break;
+                case "View All Departments":
+                    viewDepartment();
+                    break;
+                case "Add Department":
+                    addDepartment();
+                    break;
+                default:
+                    quit();
+            }
+        })
+}
+
+const viewEmployees = () => {
+    db.query("SELECT * FROM employee", function (err, result) {
+        if (err) throw err;
+        console.table(result);
+        firstQuestion();
+    });
 }
 
 module.exports = sequelize
