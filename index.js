@@ -67,5 +67,28 @@ const viewEmployees = () => {
     });
 }
 
+const updateEmployee = () => {
+    inquirer.prompt ([
+        {
+            type: "input",
+            name: "updateEmployee",
+            message: "Which employee would you like to update?"
+        },
+
+        {
+            type: "input",
+            name: "updateRole",
+            message: "What role do you want to update to?"
+        }
+    ])
+    .then(result => {
+        db.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [answer.updateRole, answer.updateEmployee], function(err, result) {
+            if (err) throw err;
+            console.table(result);
+            firstQuestion();
+        })
+    })
+}
+
 module.exports = sequelize
 
