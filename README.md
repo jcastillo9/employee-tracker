@@ -40,6 +40,8 @@ As a business owner, I want to be able to view and manage the departments, roles
 
 ## Installation
  Video Walkthrough: <https://watch.screencastify.com/v/nK9ht2r7jhonLeGf9uRNz>
+
+ <img src="assets/images/ScreenShot.png"/>
  
  ## Questions:
  ### Reach me here:
