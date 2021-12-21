@@ -1,8 +1,20 @@
 const mysql = require('mysql2');
+const graphic = require('asciiart-logo');
+const connectgraphic = require('./package.json');
 const inquirer = require('inquirer');
-const fs = require('fs')
-const Sequelize = require('sequelize');
 const table = require('console.table');
+
+console.log(graphic(connectgraphic).render());
+
+const db = mysql.createConnection (
+    {
+        host: 'localhost',
+        user: 'root',
+        password: 'password1',
+        database: 'management_db'
+    },
+    console.log('Connected to the management_db database.')
+);
 
 const firstQuestion = () => {
     inquirer.prompt([
@@ -13,16 +25,16 @@ const firstQuestion = () => {
             choices: [
                 "View All Employees",
                 "Update Employee Role",
+                "Add Employee",
                 "View All Roles",
                 "Add Role",
                 "View All Departments",
-                "Add Department",
-                "Quit"
+                "Add Department"
             ]
         }
     ])
         .then(result => {
-            console.log("You selected to" + result.option);
+            console.log("You selected to " + result.option);
             switch (result.option) {
                 case "View All Employees":
                     viewEmployees();
@@ -52,7 +64,7 @@ const firstQuestion = () => {
 }
 
 const viewEmployees = () => {
-    db.query("SELECT * FROM employee", function (err, result) {
+    db.query("SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.name AS department, roles.salary, CONCAT(manager.first_name, ' ' , manager.last_name) AS manager FROM employee INNER JOIN roles ON employee.role_id = roles.id INNER JOIN department ON roles.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id", function (err, result) {
         if (err) throw err;
         console.table(result);
         firstQuestion();
@@ -64,17 +76,17 @@ const updateEmployee = () => {
         {
             type: "input",
             name: "updateEmployeeRole",
-            message: "Which employee would you like to update?"
+            message: "Which is the first name of the employee would you like to update?"
         },
 
         {
             type: "input",
             name: "updateRole",
-            message: "What role do you want to update to?"
+            message: "What is the role ID of the role do you want to update to?"
         }
     ])
     .then(result => {
-        db.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [result.updateRole, result.updateEmployeeRole], function(err, result) {
+        db.query("UPDATE employee SET role_id=? WHERE first_name= ?", [result.updateRole, result.updateEmployeeRole], function(err, result) {
             if (err) throw err;
             console.table(result);
             firstQuestion();
@@ -83,7 +95,7 @@ const updateEmployee = () => {
 }
 
 const viewRoles = () => {
-    db.query("SELECT * FROM roles", function (err, result) {
+    db.query("SELECT roles.title, roles.id, department.name AS department, roles.salary FROM roles JOIN department ON roles.department_id = department.id", function (err, result) {
         if (err) throw err;
         console.table(result);
         firstQuestion();
@@ -106,21 +118,22 @@ const addEmployee = () => {
 
         {
             type: "input",
-            name: "role",
+            name: "roleID",
             message: "What is the employee's role ID number?"
         },
 
         {
             type: "input",
-            name: "manager",
+            name: "managerID",
             message: "What is the manager's ID number?"
         }
     ])
 
     .then(result => {
-        db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [result.firstName, result.lastName, result.role, result.manager], function(err, result) {
+        db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [result.firstName, result.lastName, result.roleID, result.managerID], function(err, result) {
             if (err) throw err;
             console.table(result)
+                firstQuestion();    
         })
     })
 
@@ -131,7 +144,7 @@ const addRole = () => {
         {
             type: "input",
             name: "roleName",
-            message: "What is the role?"
+            message: "What role would you like to add?"
         },
 
         {
@@ -142,13 +155,13 @@ const addRole = () => {
 
         {
             type: "input",
-            name: "departmentID",
+            name: "deptID",
             message: "What is the department ID number?"
         }
     ])
 
     .then(result => {
-        db.query("INSERT INTO role (title, salary, department_id VALUES (?, ?, ?)", [result.roleName, result.salaryAmount, result.departmentID], function (err, result) {
+        db.query("INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)", [result.roleName, result.salaryAmount, result.deptID], function (err, result) {
             if (err) throw err;
             console.table(result);
             firstQuestion();
@@ -159,7 +172,6 @@ const addRole = () => {
 
 const viewDepartment = () => {
     db.query("SELECT * FROM department", function (err, result) {
-        if (err) throw err;
         console.table(result);
         firstQuestion();
     })
@@ -175,17 +187,14 @@ const addDepartment = () => {
     ])
 
     .then(result => {
-        db.query("INSERT INTO department (name VALUES ?)", (result.deptName), function(err, result) {
+        db.query("INSERT INTO department (name) VALUES (?)", [result.deptName], function(err, result) {
             if (err) throw err;
-            console.table(result)
+            console.table(result);
+            firstQuestion();
         })
     })
 }
 
-// const quit = () => {
-//     Connection.end();
-//     process.exit();
-// }
-
+firstQuestion();
 
 
